@@ -5,7 +5,7 @@
 Procedural arctic outpost. Raw WebGL2. Four hostile roles, a boss, a full shell, touch controls.
 No external assets, no dependencies, no tracking.
 
-[**▶ Play the game**](https://norwinyu.github.io/black-ice/) · [**Screenshots & build process**](https://norwinyu.github.io/black-ice/process.html) · [**Deploy**](DEPLOY.md) · [**Source**](docs/index.html)
+[**▶ Play the game**](https://norwinyu.github.io/black-ice/) · [**Screenshots & build process**](https://norwinyu.github.io/black-ice/process.html) · [**Deploy**](DEPLOY.md) · [**Source**](index.html)
 
 `8 / 8 gates` · `163 draw calls` · `127k tris` · `12 lights` · `318 KB` · `0 dependencies`
 
@@ -26,16 +26,16 @@ no server-side code, and no network request while playing.
 
 - **Live build:** [norwinyu.github.io/black-ice](https://norwinyu.github.io/black-ice/)
 - **Feature gallery, iteration record & verification:** [process.html](https://norwinyu.github.io/black-ice/process.html)
-- **Source build:** [`docs/index.html`](docs/index.html) (identical to the root [`game.html`](game.html))
+- **Source build:** [`index.html`](index.html) (one canonical file; `docs/` holds only documentation stills)
 
 Run locally:
 
 ```bash
 python3 -m http.server 8000
-# open http://localhost:8000/game.html
+# open http://localhost:8000/index.html
 ```
 
-Opening `game.html` directly also works; a local server is recommended for pointer lock.
+Opening `index.html` directly also works; a local server is recommended for pointer lock.
 Click **DEPLOY** to start; `Esc` pauses at any time.
 
 ### Controls
@@ -228,8 +228,7 @@ shadow resolution, snow count and bloom taps.
 The source is split into ordered modules and concatenated. There are no npm dependencies.
 
 ```bash
-node build.mjs          # src/* -> game.html
-cp game.html docs/index.html
+node build.mjs          # src/* -> index.html
 ```
 
 The recorded acceptance run passed **8 / 8** gates:
@@ -302,17 +301,20 @@ skill notes are on the **[process page](https://norwinyu.github.io/black-ice/pro
 ## Repository layout
 
 ```
-game.html            playable single-file build (root)
-src/                 original source: engine, world, props, shaders, enemies, game, UI
-build.mjs            src/* -> game.html
-docs/index.html      the same game, served by GitHub Pages
-docs/process.html    feature gallery + 8-round iteration record + verification + skill
-docs/shots/          optimized JPEG stills used by the README and the site
-docs/.nojekyll       serve the folder as-is
-NOTES.md             art brief, build log, gate evidence, known limits
-README.md            this file
-DEPLOY.md            GitHub Pages steps
+index.html            playable single-file build + GitHub Pages root
+process.html          feature gallery + 8-round iteration record + verification + skill
+src/                  original source: engine, world, props, shaders, enemies, game, UI
+build.mjs             src/* -> index.html (one canonical build)
+docs/shots/           optimized JPEG stills used by README and process.html
+.nojekyll             serve the repository root as static files
+NOTES.md              art brief, build log, gate evidence, known limits
+README.md             this file
+DEPLOY.md             GitHub Pages steps
 ```
+
+`docs/` is documentation assets only — there is **no second copy of the game HTML**. The
+repo has exactly one game build (`index.html`), one process page (`process.html`) and one
+set of stills (`docs/shots/`).
 
 `/shots/` (raw captures), `/tools/` (skill harness) and `/refs/` are local-only and
 excluded by `.gitignore`. The public site contains only the game, the process page and
@@ -322,21 +324,20 @@ the optimized stills.
 
 ## Deploy
 
-GitHub Pages serves the **`docs/`** folder directly. No build step is required on the host.
-
-> **Do not publish from `/ (root)`.** The repository root has no `index.html`; GitHub Pages'
-> README index will render this README as the site home, and `game.html` stays at
-> `/game.html`. Publishing from `/docs` is what makes the game the root page:
-> `docs/index.html` (byte-identical to `game.html`) becomes `/`, and
-> `docs/process.html` becomes `/process.html`.
+GitHub Pages publishes the **repository root**. No build step is required on the host.
 
 1. **Settings → Pages → Build and deployment**
 2. **Source:** Deploy from a branch
-3. **Branch:** `main` · **Folder:** `/docs`
+3. **Branch:** `main` · **Folder:** `/ (root)`
 4. Save. After ~1 minute:
 
-- **https://norwinyu.github.io/black-ice/**
-- **https://norwinyu.github.io/black-ice/process.html**
+- **https://norwinyu.github.io/black-ice/** → `index.html` (the game)
+- **https://norwinyu.github.io/black-ice/process.html** → feature gallery
+- **https://norwinyu.github.io/black-ice/docs/shots/** → stills
+
+The root `.nojekyll` makes Pages serve the files as-is, so `README.md` is no longer used
+as the site home. `docs/` contains only documentation stills; the game HTML exists once.
+The current repository is already set to the root deployment.
 
 Step-by-step commands and troubleshooting are in [`DEPLOY.md`](DEPLOY.md).
 The site is static; there is no server, no database and no analytics.
@@ -351,7 +352,7 @@ storage. The site is static; nothing is sent to a server.
 
 The repository contains no real name, private email, address or token. The site is
 published from the owner's public GitHub account; the screenshots were re-encoded to strip
-metadata. See [`docs/process.html`](https://norwinyu.github.io/black-ice/process.html) for the
+metadata. See [`process.html`](https://norwinyu.github.io/black-ice/process.html) for the
 same statement on the site.
 
 ## Known limits

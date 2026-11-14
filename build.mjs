@@ -10,5 +10,5 @@ const ORDER = [
 const js = ORDER.map(f => `\n/* ===== ${f} ===== */\n` + readFileSync(join(HERE, 'src', f), 'utf8')).join('\n');
 const shell = readFileSync(join(HERE, 'src', 'shell.html'), 'utf8');
 const out = shell.split('/*__APP__*/').join(js);
-writeFileSync(join(HERE, 'game.html'), out);
-console.log('built game.html', (out.length / 1024).toFixed(0) + ' KB');
+writeFileSync(join(HERE, 'index.html'), out);
+console.log('built index.html', (out.length / 1024).toFixed(0) + ' KB');

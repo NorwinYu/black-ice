@@ -1,18 +1,16 @@
 # Deploy to GitHub Pages
 
-The site is completely static. The publishable folder is **`docs/`**:
-
-> **Common mistake:** publishing from **`/ (root)`** instead of **`/docs`**.
-> The repo root has no `index.html`; GitHub Pages' Jekyll README index then renders
-> `README.md` as the site home and `game.html` remains at `/game.html`.
-> `docs/index.html` is the actual Pages entry (a byte-identical copy of `game.html`).
+The site is completely static and published from the **repository root**:
 
 ```
-docs/index.html       the game
-docs/process.html     feature gallery, iteration record, verification, skill credit
-docs/shots/*.jpg      optimized screenshots
-docs/.nojekyll        keep all asset paths served as-is
+index.html          the game (site root, unique canonical build)
+process.html        feature gallery, iteration record, verification, skill credit
+docs/shots/*.jpg    documentation stills used by README and process.html
+.nojekyll           serve the root as static files (no Jekyll/README index)
 ```
+
+There is exactly **one game build** (`index.html`). `docs/` contains documentation
+stills only; it has no game HTML and no duplicate process page.
 
 Nothing is built on the host and no server-side code is used.
 
@@ -41,34 +39,39 @@ In the GitHub repository:
 
 - **Source:** Deploy from a branch
 - **Branch:** `main`
-- **Folder:** `/docs`
+- **Folder:** `/ (root)`
 - **Save**
 
-GitHub publishes the folder at:
+GitHub publishes the repository at:
 
 ```
 https://<your-account>.github.io/<repo>/
 ```
 
-The game is at `.../` (index.html) and the process page at `.../process.html`.
+- **`/`** → `index.html` (the game)
+- **`/process.html`** → the feature gallery / iteration record
+- **`/docs/shots/`** → the stills
+
+The root `.nojekyll` is what stops GitHub Pages' Jekyll README index from turning
+`README.md` into the site home. With `index.html` present, the game is the home page;
+the repository page on GitHub still shows `README.md` as usual.
 
 ## 3. Check the deployment
 
 - The title screen loads with the live 3D scene behind it.
 - Click **DEPLOY** and the pointer locks; `Esc` pauses.
-- The process page loads all screenshots from `docs/shots/` (relative paths).
+- `/process.html` loads all screenshots from `docs/shots/`.
 - There are no external requests; the browser console is clean apart from standard
   browser messaging.
 
 ## Notes
 
-- If the Pages URL shows the README instead of the game, change the Pages folder from
-  `/ (root)` to `/docs`; no code changes are needed.
-- If you insist on a root deployment, copy `docs/index.html` to the repository root as
-  `index.html`, and copy `docs/process.html` and `docs/shots/` to the root too. The
-  `/docs` source is cleaner and is what the README's links assume.
-- A custom domain: add a `CNAME` file inside `docs/` with your domain, then configure
-  the domain in **Settings → Pages**. Do not add a custom domain unless you own it.
-- No analytics are included. If you add any later, update the privacy statement on
-  the process page and in `README.md`.
+- If the Pages URL shows the README instead of the game, check that `index.html` and
+  `.nojekyll` exist at the repository root (they do in this repo), wait for the Pages
+  build, and hard-refresh. The current repository uses `main / (root)`.
+- Do not add a second copy of the game to `docs/`; the site has one canonical build.
+- A custom domain: add a `CNAME` file at the repository root, then configure the
+  domain in **Settings → Pages**. Do not add a custom domain unless you own it.
+- No analytics are included. If you add any later, update the privacy statement in
+  `README.md` and `process.html`.
 - The site is static; there is no build step required on GitHub.

@@ -10,16 +10,16 @@
 
 | 文件 | 说明 |
 |---|---|
-| `game.html` | 完整可玩的单文件游戏（打开即玩） |
+| `index.html` | 完整可玩的单文件游戏（打开即玩，也是 Pages 根入口） |
 | `shots/` | 每一轮迭代的固定相机截图、HUD 截图、产品壳层截图 |
 | `tools/` | 验收门（见第 6 节），由 skill 的 harness 复制并按项目合同修正 |
-| `build.mjs`, `src/` | 可维护源码；`node build.mjs` 生成 `game.html` |
+| `build.mjs`, `src/` | 可维护源码；`node build.mjs` 生成 `index.html` |
 
 启动：
 
 ```bash
-# 直接双击 game.html 也可运行；本地服务器更稳
-python3 -m http.server 8000    # 然后打开 http://localhost:8000/game.html
+# 直接双击 index.html 也可运行；本地服务器更稳
+python3 -m http.server 8000    # 然后打开 http://localhost:8000/index.html
 ```
 
 ---
@@ -122,7 +122,7 @@ python3 -m http.server 8000    # 然后打开 http://localhost:8000/game.html
 ## 6. 验收门（acceptance）
 
 ```bash
-node tools/verify.mjs --dir . --page game.html --profile refs/profile.json
+node tools/verify.mjs --dir . --page index.html --profile refs/profile.json
 ```
 
 本项目的 `refs/profile.json` 不存在：用户要求不从任何参考材料出发，因此按 skill
