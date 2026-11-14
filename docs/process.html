@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLACK ICE · 白夜站 — Feature Gallery &amp; Build Process</title>
+<meta name="description" content="BLACK ICE is a playable first-person shooter built from code in a single HTML file, following the photoreal-game skill. Feature gallery, iteration record and verification.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --ink:#ece9df; --dim:#9ca6a6; --faint:#687170; --line:rgba(236,233,223,.14);
+  --ice:#a8d4e2; --amber:#ffb15e; --red:#ff5b3d; --ok:#8fe0c2;
+  --bg:#05080a; --panel:#0a1013;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+  background-image:radial-gradient(1400px 700px at 72% -12%,rgba(52,92,120,.24),transparent 60%),
+                   radial-gradient(900px 550px at 6% 8%,rgba(150,70,28,.10),transparent 60%);}
+img{display:block;max-width:100%}
+a{color:var(--ice);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(18px,4vw,54px)}
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(5,8,10,.72);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px;height:56px}
+nav .brand{font-family:var(--mono);font-size:10px;letter-spacing:.32em;color:var(--ice);text-transform:uppercase}
+nav .links{display:flex;gap:clamp(10px,2vw,24px);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+nav .links a{color:var(--dim)}
+nav .links a:hover{color:var(--ink);text-decoration:none}
+nav .play{border:1px solid rgba(255,177,94,.6);color:#ffe0bd;padding:7px 13px;font-size:10px;letter-spacing:.16em}
+nav .play:hover{background:rgba(255,140,62,.14)}
+@media (max-width:760px){nav .links a:not(.play){display:none}}
+header.hero{padding:clamp(44px,7vw,92px) 0 clamp(30px,4vw,48px);position:relative}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.36em;color:var(--ice);text-transform:uppercase;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:32px;height:1px;background:var(--ice);opacity:.8}
+h1{font-size:clamp(54px,10vw,136px);line-height:.86;margin:22px 0 6px;font-weight:700;letter-spacing:.01em}
+h1 span{font-weight:200;letter-spacing:.05em;color:#cdd8d8}
+.zh{font-size:clamp(16px,2vw,22px);letter-spacing:.42em;color:#d7d3c6;margin:8px 0 22px}
+.lede{max-width:760px;color:var(--dim);font-size:clamp(13px,1.4vw,15.5px);line-height:1.95}
+.lede b{color:var(--ink);font-weight:500}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 28px}
+.badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#c9d3d2;
+  border:1px solid var(--line);padding:7px 10px;background:rgba(10,16,19,.5)}
+.badge b{color:var(--ok);font-weight:400}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:14px 20px;
+  border:1px solid var(--line);color:var(--ink);display:inline-block;background:rgba(10,16,19,.6)}
+.btn.primary{border-color:rgba(255,177,94,.8);background:rgba(255,140,62,.10);color:#ffe4c5}
+.btn:hover{background:rgba(236,233,223,.08);text-decoration:none}
+.credit{margin-top:22px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--faint);text-transform:uppercase}
+.credit b{color:var(--amber);font-weight:400}
+.hero-shot{margin-top:clamp(30px,4vw,48px);border:1px solid var(--line);background:#000;position:relative}
+.hero-shot img{width:100%;height:auto}
+.hero-shot .tag{position:absolute;left:14px;bottom:14px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  color:#e9e3d7;background:rgba(4,7,9,.7);padding:6px 9px;text-transform:uppercase}
+section{padding:clamp(46px,6vw,82px) 0;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:minmax(180px,.55fr) 1.45fr;gap:clamp(18px,4vw,56px);align-items:end;margin-bottom:clamp(24px,3vw,38px)}
+@media (max-width:820px){.sec-head{grid-template-columns:1fr}}
+.sec-no{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--amber);text-transform:uppercase}
+h2{font-size:clamp(25px,3.4vw,42px);font-weight:300;letter-spacing:.02em;margin:7px 0 0;line-height:1.15}
+h2 b{font-weight:600}
+.sec-desc{color:var(--dim);font-size:14px;line-height:1.9;max-width:760px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:980px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.g2,.g3,.g4{grid-template-columns:1fr}}
+figure{margin:0;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+figure .im{position:relative;background:#000}
+figure img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;transition:transform .45s ease}
+figure:hover img{transform:scale(1.015)}
+figure.portrait img{aspect-ratio:390/844;object-fit:cover}
+figure figcaption{padding:13px 15px 16px}
+figure .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.26em;color:var(--amber);text-transform:uppercase;display:block;margin-bottom:5px}
+figure b{display:block;font-size:13.5px;letter-spacing:.04em;font-weight:500;color:#eeece2}
+figure em{display:block;font-style:normal;font-size:11.5px;line-height:1.7;color:var(--dim);margin-top:4px}
+.span2{grid-column:span 2}
+.feat-block{margin:clamp(28px,4vw,44px) 0}
+.feat-block .fl{display:flex;justify-content:space-between;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+.feat-block .fl h3{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--ice);text-transform:uppercase;margin:0;font-weight:400}
+.feat-block .fl span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+.skill{position:relative;border:1px solid var(--line);background:linear-gradient(135deg,rgba(168,212,226,.07),rgba(255,177,94,.04) 50%,rgba(10,16,19,.7));padding:clamp(24px,4vw,42px)}
+.skill .tagline{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--amber);text-transform:uppercase;margin:0 0 14px}
+.skill h3{font-size:clamp(26px,4vw,48px);font-weight:200;letter-spacing:.02em;line-height:1.1;margin:0 0 14px}
+.skill h3 b{font-weight:700;color:var(--ice)}
+.skill p{color:var(--dim);font-size:14px;line-height:1.95;max-width:900px}
+.skill p b{color:var(--ink);font-weight:500}
+.skill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+@media (max-width:900px){.skill-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.skill-grid{grid-template-columns:1fr}}
+.skill-grid div{border-top:1px solid rgba(168,212,226,.35);padding-top:12px;font-size:12px;color:var(--dim);line-height:1.75}
+.skill-grid b{display:block;color:var(--ink);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;font-weight:400}
+.callout{margin-top:22px;border-left:2px solid var(--amber);padding:10px 14px;background:rgba(255,177,94,.06);color:#d9cfbf;font-size:12.5px;line-height:1.8}
+.callout b{color:#ffe0b8}
+.timeline{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media (max-width:900px){.timeline{grid-template-columns:1fr}}
+.round{display:grid;grid-template-columns:minmax(180px,46%) 1fr;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+@media (max-width:560px){.round{grid-template-columns:1fr}}
+.round img{width:100%;height:100%;object-fit:cover;min-height:160px}
+.round .rt{padding:16px 17px 18px}
+.round .rn{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--amber);text-transform:uppercase}
+.round h4{font-size:15px;font-weight:500;margin:6px 0 7px;letter-spacing:.02em}
+.round p{margin:0;color:var(--dim);font-size:11.5px;line-height:1.8}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);font-weight:400}
+td.pass{color:var(--ok);font-family:var(--mono);font-size:11px;white-space:nowrap}
+td code{font-family:var(--mono);font-size:10.5px;color:#c9d3d2}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:22px}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--panel);padding:18px 16px}
+.stat b{display:block;font-family:var(--mono);font-size:clamp(20px,2.6vw,30px);font-weight:300;color:#f0ede4;letter-spacing:.02em}
+.stat span{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;color:var(--faint);text-transform:uppercase;margin-top:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px)}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+ul.clean{list-style:none;margin:0;padding:0}
+ul.clean li{padding:9px 0;border-bottom:1px solid rgba(236,233,223,.08);color:var(--dim);font-size:12.5px}
+ul.clean li b{color:var(--ink);font-weight:500}
+ul.clean li span{color:var(--faint);font-family:var(--mono);font-size:10px;letter-spacing:.08em}
+.note{color:var(--dim);font-size:12.5px;line-height:1.9}
+.note b{color:var(--ink);font-weight:500}
+footer{border-top:1px solid var(--line);padding:34px 0 54px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;align-items:center}
+footer .fnote{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--faint);text-transform:uppercase;line-height:2}
+footer .fnote b{color:var(--dim);font-weight:400}
+.endcta{border:1px solid var(--line);padding:clamp(22px,3vw,34px);display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;align-items:center;background:rgba(10,16,19,.5)}
+.endcta h3{font-size:clamp(20px,2.4vw,30px);font-weight:300;margin:0;letter-spacing:.04em}
+.endcta p{margin:6px 0 0;color:var(--dim);font-size:12px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">BLACK ICE · 白夜站</a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#skill">Skill</a>
+      <a href="#process">Process</a>
+      <a href="#verify">Verification</a>
+      <a class="play" href="./index.html">▶ PLAY</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">Procedural · Single-file · Playable</div>
+    <h1>BLACK<span>ICE</span></h1>
+    <div class="zh">白 夜 站</div>
+    <p class="lede">An arctic listening post at last light. Wake three relays, hold the yard against the
+      station's guard machines, and bring down <b>Warden Prime</b> before it seals the sky.
+      Everything here — the world, the snow, the materials, the enemies, the HUD, the audio — is
+      <b>generated from code</b>. One HTML file. No external assets. No network requests.</p>
+    <div class="badges">
+      <span class="badge">8 / 8 gates <b>PASS</b></span>
+      <span class="badge">single-file <b>HTML</b></span>
+      <span class="badge"><b>127k</b> tris · 162 draws</span>
+      <span class="badge">mouse + keyboard + <b>touch</b></span>
+      <span class="badge">no tracking</span>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="./index.html">▶ Play the game</a>
+      <a class="btn" href="#features">Features &amp; screenshots</a>
+      <a class="btn" href="#process">How it was built</a>
+    </div>
+    <div class="credit">Built with the <b>photoreal-game</b> skill · independent, no reference material</div>
+    <div class="hero-shot">
+      <img loading="eager" decoding="async" src="shots/title.jpg" alt="BLACK ICE title screen over a procedural arctic outpost at dusk">
+      <span class="tag">Title key art · live 3D scene behind the menu · HUD hidden</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">01 — Feature contact sheet</div></div>
+      <div><h2>Every system, <b>on screen</b></h2>
+        <p class="sec-desc">Objective chain and world markers, both tools, all four hostile roles, survival,
+        the full shell, touch and the world itself. Screenshots are from the shipped build; no mockups.</p></div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Core loop · objectives, compass, world markers</h3><span>01 / Loop</span></div>
+      <div class="grid g2">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/relay.jpg" alt="ALPHA relay tower at close range with activated cyan ring"></div>
+          <figcaption><span class="k">Objective chain</span><b>Relays are physical places</b>
+          <em>Walk to the tower, press E, and the world answers: the beacon goes from red to a cyan ring, the HUD step advances, and a wave is queued. Three relays, then the Warden.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/gameplay.jpg" alt="First-person view of the outpost with HUD, markers, compass and enemies"></div>
+          <figcaption><span class="k">HUD hierarchy</span><b>Objective → survival → weapon</b>
+          <em>Objective card, compass with bearings and distances, world markers, health, ammo, tool state, prompt and subtitles. The nearest interactable always names its key; nothing out of range does.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Tools · AR-9 and ARC-9</h3><span>02 / Verbs</span></div>
+      <div class="grid g2">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/firefight.jpg" alt="AR-9 aimed down sights with hostiles in the yard and HUD"></div>
+          <figcaption><span class="k">Primary · AR-9 Hammer</span><b>Hitscan rifle</b>
+          <em>640 RPM, 30-round magazine, ADS, recoil kick, spread while moving, hit markers, headshot multiplier, decals and muzzle light. Reload and empty states are audible and visible. The frame shows the aimed sight picture and the HUD's ammo state.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/arc.jpg" alt="ARC-9 coil gauntlet with a cyan discharge and cooldown in the HUD"></div>
+          <figcaption><span class="k">Secondary · ARC-9 Coil</span><b>Chain lightning</b>
+          <em>Fires at up to three targets in a cone, damage falls off along the chain, and a five-second cooldown is shown as a dial and a numeric readout. It is the answer to the heavy's shield.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Hostiles · four roles and a climax</h3><span>03 / Threats</span></div>
+      <div class="grid g2">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/roster.jpg" alt="Raider, Wasp and Heavy hostile roles in the snow"></div>
+          <figcaption><span class="k">Roles</span><b>Raider · Wasp · Heavy</b>
+          <em>Raiders advance, strafe and fire telegraphed bursts; Wasps hover, orbit and throw dodgeable plasma; Heavies carry a shield that softens frontal fire and fire a five-shot spread.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/boss.jpg" alt="Warden Prime boss fight with boss health bar"></div>
+          <figcaption><span class="k">Climax</span><b>Warden Prime</b>
+          <em>A hovering core ringed by armour plates, with three exposed emitters, a radial plasma burst, summoned Wasps and a dedicated boss bar. Kill it and the extraction timer starts.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Survival · pressure and recovery</h3><span>04 / Stakes</span></div>
+      <div class="grid g2">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/survival.jpg" alt="Low health, damage direction and supply prompt in the HUD"></div>
+          <figcaption><span class="k">Failure &amp; recovery</span><b>Named damage, supply caches</b>
+          <em>Directional damage, a red low-health vignette, delayed regeneration, and supply crates that refill reserve ammo and restore health. Death names the attacker and weapon on the end screen.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/gameplay.jpg" alt="Weapon, health and ammo HUD during play"></div>
+          <figcaption><span class="k">Resource loop</span><b>Limited mag, finite reserve</b>
+          <em>Ammo, reload state, reserve, health and regen are all visible; the player has to move between cover and caches instead of holding one angle.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Shell · the finished-product layer</h3><span>05 / Menu</span></div>
+      <div class="grid g4">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/pause.jpg" alt="Pause screen with run stats"></div><figcaption><span class="k">Pause</span><b>Run stats</b><em>Resume, settings, restart, menu.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/settings.jpg" alt="Settings screen with sensitivity, volume, FOV and quality"></div><figcaption><span class="k">Settings</span><b>Calibration</b><em>Sensitivity, volume, FOV, invert Y, quality, mute; persisted.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/lost.jpg" alt="Failure screen naming the attacker and weapon"></div><figcaption><span class="k">Failure</span><b>Named cause</b><em>“You were cut down by a Raider's wolf rifle.”</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/won.jpg" alt="Victory screen with run statistics"></div><figcaption><span class="k">Victory</span><b>Signal sent</b><em>Relays, kills, time, score, best.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>World &amp; image formation</h3><span>06 / Look</span></div>
+      <div class="grid g3">
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/hero.jpg" alt="Hero camera: snowcat, huts, masts and mountains at dusk"></div><figcaption><span class="k">Hero</span><b>Low sun, long shadows</b><em>Snowcat foreground, midground modules, 16 m mast and three mountain layers.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/close.jpg" alt="Close camera on the snowcat side"></div><figcaption><span class="k">Close · 3 m</span><b>Hard-surface close-read</b><em>Chamfered edges, snow caps, grime, door seams, instrument glow, track plates.</em></figcaption></figure>
+        <figure><div class="im"><img loading="lazy" decoding="async" src="shots/wide.jpg" alt="Wide camera under a large dusk sky"></div><figcaption><span class="k">Wide</span><b>Place, not a room</b><em>Sky structure, horizon haze, ridge silhouette, warm practicals against cold fill.</em></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feat-block">
+      <div class="fl"><h3>Touch · 390 × 844</h3><span>07 / Mobile</span></div>
+      <div class="grid g2">
+        <figure class="portrait"><div class="im"><img loading="lazy" decoding="async" src="shots/mobile.jpg" alt="Mobile title screen at 390 by 844"></div><figcaption><span class="k">Mobile title</span><b>No horizontal overflow</b><em>Same shell, responsive type and menu; no hover dependency.</em></figcaption></figure>
+        <figure class="portrait"><div class="im"><img loading="lazy" decoding="async" src="shots/mobile-gameplay.jpg" alt="Mobile gameplay with touch controls"></div><figcaption><span class="k">Touch combat</span><b>Stick, look, fire, aim, reload, interact, jump, swap</b><em>The mobile gate verifies the layout and controls at 390×844.</em></figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skill">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">02 — The procedure</div></div>
+      <div><h2>Built with the <b>photoreal-game</b> skill</h2>
+        <p class="sec-desc">A skill for turning a code-generated 3D scene into a short, playable game that reads as photographic:
+        product first, then look; every judgement delegated to a gate; one lever per round.</p></div>
+    </div>
+    <div class="skill">
+      <div class="tagline">Skill · photoreal-game</div>
+      <h3>Not a template. A <b>procedure</b>.</h3>
+      <p>The skill supplied the workflow this project actually ran on: a render-observable page contract,
+      an art-direction brief, a kit-and-solids budget, and a sequence of executable gates.
+      The game itself — the outpost, the snow system, the enemies, the loop, the shell — is original to this project.
+      No reference image, model, texture or audio file was used.</p>
+      <div class="skill-grid">
+        <div><b>Render-observable</b>Fixed cameras, a seeded clock, a page contract: <code>__READY</code>, <code>__STATS</code>, <code>__PRODUCT</code>, <code>?shot</code>, <code>?cam</code>, <code>?seed</code>.</div>
+        <div><b>Product first</b>Title, settings, pause, save, lost, won, touch and a complete objective chain existed before the final grading pass.</div>
+        <div><b>Gated, not opinionated</b>Shaders, census, collision parity, light anchoring, playtest, product, mobile and look. A gate that lives only in a README is not run.</div>
+        <div><b>One lever per round</b>Every iteration changed one thing and re-shot the fixed cameras. Renders were kept; regressions were reverted.</div>
+      </div>
+      <div class="callout"><b>Declared look fallback.</b> The brief forbade reference material, so no project reference profile was captured.
+      The look gate runs in its declared fallback mode — tone (clipping, midtones) and emptiness (flat tiles) only — rather than
+      borrowing another subject's energy profile.</div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">03 — Iteration record</div></div>
+      <div><h2>What changed, <b>round by round</b></h2>
+        <p class="sec-desc">The first frame was nearly black. The snowcat once exploded into floating parts. A global replace
+        once broke the start button. Each failure is kept here with the fix, because a build log without failures is a brochure.</p></div>
+    </div>
+    <div class="timeline">
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-00.jpg" alt="First render, nearly black">
+        <div class="rt"><div class="rn">Round 00 · shaders</div><h4>Almost black</h4>
+        <p><code>sampler2DShadow</code> had no precision and FXAA was missing the noise function: world and sky programs failed.
+        Fixed the precision and the include. The scene appeared.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-01.jpg" alt="First lit hero frame">
+        <div class="rt"><div class="rn">Round 01 · composition</div><h4>Make it readable</h4>
+        <p>Moved the fence out of the camera and the fuel tank off the sightline; raised exposure; chose a camera with a
+        foreground, a subject and a mast. Flat and pink, but finally readable.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-02.jpg" alt="Exploded snowcat parts floating">
+        <div class="rt"><div class="rn">Round 02 · transform stack</div><h4>The snowcat exploded</h4>
+        <p>Unbalanced <code>at()</code> calls accumulated transforms. Rewrote the vehicle with a balanced <code>rbox()</code>
+        helper and reduced high-frequency paint and rust noise.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-03.jpg" alt="Hero after moving the key light south-west">
+        <div class="rt"><div class="rn">Round 03 · light</div><h4>Move the key south-west</h4>
+        <p>Every camera-facing face was in shadow. A south-west low sun lit the facades and the snowcat side, and the sky
+        turned cold blue with an anti-solar horizon band.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-04.jpg" alt="Snow detail and radome">
+        <div class="rt"><div class="rn">Round 04 · world</div><h4>Wind-packed snow</h4>
+        <p>Height-field normals, sastrugi, boot prints, tyre ruts, a radome, cable reels and three jagged ridge layers.
+        Flat tiles fell from 23% to 5%.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-05.jpg" alt="First gameplay HUD frame">
+        <div class="rt"><div class="rn">Round 05 · product</div><h4>HUD, enemies, gun</h4>
+        <p>First in-game frame. The rifle was huge, the reticle vanished and a crate blocked half the view. Scaled the
+        viewmodel, thickened the reticle, moved the demo and the crate.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-06.jpg" alt="Combat readability">
+        <div class="rt"><div class="rn">Round 06 · readability</div><h4>See the enemy</h4>
+        <p>Cyan shoulder/chest lamps, red visors and small position glows make hostiles legible at range. Softer tracks,
+        deeper grading; the look gate's tone band was reached.</p></div></div>
+      <div class="round"><img loading="lazy" decoding="async" src="shots/iter-07.jpg" alt="Final gameplay frame">
+        <div class="rt"><div class="rn">Round 07 · regressions</div><h4>Two real bugs</h4>
+        <p>The boss kill never scheduled the win (the hook set the flag early), and one global replace put a demo branch
+        inside <code>startGame()</code>. Both fixed and re-verified. Then the feature contact sheet was shot.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="verify">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">04 — Acceptance</div></div>
+      <div><h2>Eight gates, <b>one verdict</b></h2>
+        <p class="sec-desc">The acceptance command runs the skill's gates against the page contract. The full run passed 8/8;
+        the final shell and FX edits were re-checked with the affected gates.</p></div>
+    </div>
+    <table>
+      <thead><tr><th>Gate</th><th>Result</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td><code>shaders</code></td><td class="pass">PASS</td><td>No shader compile/link errors; shadow, HDR, bloom and FXAA all live.</td></tr>
+        <tr><td><code>census</code></td><td class="pass">PASS</td><td>150 meshes, 0 object-contract failures; every close prop has identity and parts.</td></tr>
+        <tr><td><code>collide</code></td><td class="pass">PASS</td><td>0 penetrations, 0 out-of-bounds, 0 bare boundary, 0 walk-through; free-walk 0.88.</td></tr>
+        <tr><td><code>lights</code></td><td class="pass">PASS</td><td>Every point light sits on a modeled fixture; no floating light.</td></tr>
+        <tr><td><code>playtest</code></td><td class="pass">PASS</td><td>ALPHA → BRAVO → CHARLIE progress 1 → 2 → 3; lethal damage names a cause, shows the end screen and resets to 100 HP.</td></tr>
+        <tr><td><code>product</code></td><td class="pass">PASS</td><td>Title, settings, pause, save, lost, won, touch, objectives, roles, tools, cameras and budgets. 162 calls / 127,337 tris / 12 lights.</td></tr>
+        <tr><td><code>mobile</code></td><td class="pass">PASS</td><td>390×844, scroll size 390×844, no horizontal overflow, touch UI present.</td></tr>
+        <tr><td><code>look</code></td><td class="pass">PASS*</td><td>Fallback tone + emptiness: hero 77.5% / close 75.2% / wide 72.0% midtones; flat 3% / 0% / 7%; clip hi ≤0.18%, lo ≤0.56%.</td></tr>
+      </tbody>
+    </table>
+    <div class="stats">
+      <div class="stat"><b>8 / 8</b><span>acceptance gates</span></div>
+      <div class="stat"><b>162</b><span>draw calls</span></div>
+      <div class="stat"><b>127k</b><span>triangles</span></div>
+      <div class="stat"><b>12</b><span>lights (9 point + sun + sky + muzzle)</span></div>
+    </div>
+    <p class="note" style="margin-top:18px">* Look gate ran in the skill's declared fallback mode because no reference material was allowed.
+    It reports tone and emptiness; it is not a similarity score against another subject. See <b>NOTES.md</b> for the full log.</p>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">05 — Field notes</div></div>
+      <div><h2>Controls, systems, <b>honest limits</b></h2></div>
+    </div>
+    <div class="cols">
+      <div>
+        <ul class="clean">
+          <li><b>WASD</b> move <span>· SHIFT sprint · SPACE jump</span></li>
+          <li><b>Mouse</b> look <span>· LMB fire · RMB aim</span></li>
+          <li><b>R</b> reload <span>· E interact · Q / 1 / 2 switch tool</span></li>
+          <li><b>Esc</b> pause <span>· M mute</span></li>
+          <li><b>Touch</b> left stick <span>· right-drag look · on-screen actions</span></li>
+        </ul>
+        <p class="note" style="margin-top:18px"><b>Systems in the build:</b> 17 synthesized audio events with a master mute; best score and
+        settings persisted locally; sensitivity, volume, FOV, invert-Y, quality and mute; quality presets for draw/shadow/snow budgets;
+        mouse fallback via drag when pointer lock is unavailable; six shell screens and six demo/feature stills.</p>
+      </div>
+      <div>
+        <p class="note"><b>Known limits.</b> Enemies are rigid-part rigs, not skinned meshes: readable at combat range, robotic up close.
+        Audio is synthesized, not recorded. The narrow-screen HUD and the viewmodel can overlap the right-hand touch buttons at 390×844.
+        There is no mid-run save, only best score and settings. Headless stills were rendered with SwiftShader; real-GPU frame rate
+        was not measured in this build. The look gate is a declared fallback, not a photographic similarity score.</p>
+        <p class="note"><b>Privacy.</b> No analytics, cookies, accounts, external fonts or third-party requests. The game writes only
+        <code>blackice.best</code> and <code>blackice.settings</code> to the browser's local storage. The site is static.</p>
+        <p class="note"><b>Original work.</b> Geometry, materials, sky, snow, UI, audio and game code were produced for this project.
+        The <b>photoreal-game</b> skill supplied the procedure and gate design; its harness is credited but not redistributed here.
+        No reference material or external asset was used.</p>
+      </div>
+    </div>
+    <div class="endcta" style="margin-top:34px">
+      <div><h3>Play BLACK ICE</h3><p>One HTML file. Mouse, keyboard or touch. 6–10 minutes.</p></div>
+      <a class="btn primary" href="./index.html">▶ Deploy into the yard</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fnote"><b>BLACK ICE · 白夜站</b><br>procedural FPS · single file · no external assets</div>
+    <div class="fnote">Built with the <b>photoreal-game</b> skill<br>no analytics · no cookies · no personal data</div>
+    <a class="btn" href="#top">Back to top</a>
+  </div>
+</footer>
+<script>window.__READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+.DS_Store
+*.log
+
+# raw development captures (curated copies live in docs/shots)
+/shots/
+
+# the skill harness is local-only; results are recorded in NOTES.md / docs/process.html
+/tools/
+/refs/
+
+# local scratch pages
+/gallery.html
+/gallery.mjs
+
+# dependencies (none are required)
+node_modules/
