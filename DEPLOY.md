@@ -2,6 +2,11 @@
 
 The site is completely static. The publishable folder is **`docs/`**:
 
+> **Common mistake:** publishing from **`/ (root)`** instead of **`/docs`**.
+> The repo root has no `index.html`; GitHub Pages' Jekyll README index then renders
+> `README.md` as the site home and `game.html` remains at `/game.html`.
+> `docs/index.html` is the actual Pages entry (a byte-identical copy of `game.html`).
+
 ```
 docs/index.html       the game
 docs/process.html     feature gallery, iteration record, verification, skill credit
@@ -57,8 +62,11 @@ The game is at `.../` (index.html) and the process page at `.../process.html`.
 
 ## Notes
 
-- If you prefer a root deployment, copy the contents of `docs/` to the repository
-  root and publish from `main / (root)`. Keep `docs/index.html` as the game.
+- If the Pages URL shows the README instead of the game, change the Pages folder from
+  `/ (root)` to `/docs`; no code changes are needed.
+- If you insist on a root deployment, copy `docs/index.html` to the repository root as
+  `index.html`, and copy `docs/process.html` and `docs/shots/` to the root too. The
+  `/docs` source is cleaner and is what the README's links assume.
 - A custom domain: add a `CNAME` file inside `docs/` with your domain, then configure
   the domain in **Settings → Pages**. Do not add a custom domain unless you own it.
 - No analytics are included. If you add any later, update the privacy statement on

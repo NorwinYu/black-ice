@@ -324,6 +324,12 @@ the optimized stills.
 
 GitHub Pages serves the **`docs/`** folder directly. No build step is required on the host.
 
+> **Do not publish from `/ (root)`.** The repository root has no `index.html`; GitHub Pages'
+> README index will render this README as the site home, and `game.html` stays at
+> `/game.html`. Publishing from `/docs` is what makes the game the root page:
+> `docs/index.html` (byte-identical to `game.html`) becomes `/`, and
+> `docs/process.html` becomes `/process.html`.
+
 1. **Settings → Pages → Build and deployment**
 2. **Source:** Deploy from a branch
 3. **Branch:** `main` · **Folder:** `/docs`
