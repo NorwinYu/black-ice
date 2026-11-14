@@ -77,7 +77,7 @@ The recorded acceptance run passed **8 / 8** gates:
 shaders  census  collide  lights  playtest  product  mobile  look
 ```
 
-- Product: 162 draw calls, 127,337 triangles, 12 lights.
+- Product: 163 draw calls, 127,337 triangles, 12 lights. Final build re-check: product / playtest / mobile PASS.
 - Look fallback: hero 77.5% / close 75.2% / wide 72.0% midtones; flat tiles 3% / 0% / 7%.
 - Playtest: ALPHA → BRAVO → CHARLIE completes; lethal damage produces a named cause,
   an end screen, and a clean reset.

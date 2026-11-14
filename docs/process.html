@@ -330,7 +330,7 @@ footer .fnote b{color:var(--dim);font-weight:400}
       <div class="round"><img loading="lazy" decoding="async" src="shots/iter-07.jpg" alt="Final gameplay frame">
         <div class="rt"><div class="rn">Round 07 · regressions</div><h4>Two real bugs</h4>
         <p>The boss kill never scheduled the win (the hook set the flag early), and one global replace put a demo branch
-        inside <code>startGame()</code>. Both fixed and re-verified. Then the feature contact sheet was shot.</p></div></div>
+        inside <code>startGame()</code>. Both fixed and re-verified. The late feature pass then exposed a third real bug: ribbon tracers at point-blank range became screen-filling triangles. They were replaced with additive sprite streaks, and the feature contact sheet was shot.</p></div></div>
     </div>
   </div>
 </section>
@@ -351,14 +351,14 @@ footer .fnote b{color:var(--dim);font-weight:400}
         <tr><td><code>collide</code></td><td class="pass">PASS</td><td>0 penetrations, 0 out-of-bounds, 0 bare boundary, 0 walk-through; free-walk 0.88.</td></tr>
         <tr><td><code>lights</code></td><td class="pass">PASS</td><td>Every point light sits on a modeled fixture; no floating light.</td></tr>
         <tr><td><code>playtest</code></td><td class="pass">PASS</td><td>ALPHA → BRAVO → CHARLIE progress 1 → 2 → 3; lethal damage names a cause, shows the end screen and resets to 100 HP.</td></tr>
-        <tr><td><code>product</code></td><td class="pass">PASS</td><td>Title, settings, pause, save, lost, won, touch, objectives, roles, tools, cameras and budgets. 162 calls / 127,337 tris / 12 lights.</td></tr>
+        <tr><td><code>product</code></td><td class="pass">PASS</td><td>Title, settings, pause, save, lost, won, touch, objectives, roles, tools, cameras and budgets. 163 calls / 127,337 tris / 12 lights.</td></tr>
         <tr><td><code>mobile</code></td><td class="pass">PASS</td><td>390×844, scroll size 390×844, no horizontal overflow, touch UI present.</td></tr>
         <tr><td><code>look</code></td><td class="pass">PASS*</td><td>Fallback tone + emptiness: hero 77.5% / close 75.2% / wide 72.0% midtones; flat 3% / 0% / 7%; clip hi ≤0.18%, lo ≤0.56%.</td></tr>
       </tbody>
     </table>
     <div class="stats">
       <div class="stat"><b>8 / 8</b><span>acceptance gates</span></div>
-      <div class="stat"><b>162</b><span>draw calls</span></div>
+      <div class="stat"><b>163</b><span>draw calls</span></div>
       <div class="stat"><b>127k</b><span>triangles</span></div>
       <div class="stat"><b>12</b><span>lights (9 point + sun + sky + muzzle)</span></div>
     </div>

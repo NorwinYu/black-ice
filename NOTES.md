@@ -199,3 +199,18 @@ node tools/verify.mjs --dir . --page game.html --profile refs/profile.json
 | `final/mobile-gameplay.png` | 390×844 战斗 + 左摇杆/开火/瞄准/换弹/互动 |
 
 `final/` 目录为验收后的固定相机重拍；`gallery.html` 把最终画面与迭代过程和并成一页。
+
+
+## Late feature pass (after acceptance)
+
+- Added demo modes 9–14 for the feature contact sheet: ARC-9 discharge, hostile roster,
+  low-health/supply, ADS combat and clean diagnostics.
+- Fixed a real firing bug found by the feature stills: billboard ribbon tracers at
+  point-blank range could become screen-filling triangles. Tracers and arc bolts now
+  use short additive sprite streaks instead; the giant-star diagnostic frames are
+  intentionally not in the public gallery.
+- The `?q=` quality query now applies after boot instead of being overwritten by
+  persisted settings.
+- Final build re-check: product (163 calls / 127,337 tris / 12 lights), playtest and
+  mobile all PASS. The full 8/8 acceptance run and the scene/camera gates are unchanged.
+- Public Pages site lives in `docs/`; the photo gallery uses optimized JPEGs.
